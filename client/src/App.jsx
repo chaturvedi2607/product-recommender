@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { PRODUCTS } from "./products";
 
+const API_BASE_URL = "https://product-recommender-peach.vercel.app";
+
 export default function App() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,14 +17,11 @@ export default function App() {
     setRecommendedIds([]);
 
     try {
-      const resp = await fetch(
-        "https://product-recommender-peach.vercel.app/recommend",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: query, products: PRODUCTS }),
-        }
-      );
+      const resp = await fetch(`${API_BASE_URL}/recommend`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: query, products: PRODUCTS }),
+      });
       if (!resp.ok) throw new Error(`Server error ${resp.status}`);
       const data = await resp.json();
       // data = { recommendedIds: [...], modelText: '...' }
@@ -70,6 +69,33 @@ export default function App() {
         </div>
       </div>
 
+      {error || modelText || recommendedProducts.length > 0 ? (
+        <div className="panel">
+          <h2>AI Recommendations</h2>
+          {error && <div className="error">Error: {error}</div>}
+          {modelText && (
+            <div className="model-result">
+              <h3>Model raw output</h3>
+              <pre>{modelText}</pre>
+            </div>
+          )}
+
+          <h3>Recommended products</h3>
+          {recommendedProducts.length === 0 ? (
+            <div>No recommendations yet.</div>
+          ) : (
+            <ul className="product-list">
+              {recommendedProducts.map((p) => (
+                <li key={p.id} className="product-item recommended">
+                  <strong>{p.name}</strong> — ${p.price} <em>({p.category})</em>
+                  <div className="features">{p.features.join(", ")}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : null}
+
       <div className="panel">
         <h2>All products</h2>
         <ul className="product-list">
@@ -82,34 +108,19 @@ export default function App() {
         </ul>
       </div>
 
-      <div className="panel">
-        <h2>AI Recommendations</h2>
-        {error && <div className="error">Error: {error}</div>}
-        {modelText && (
-          <div className="model-result">
-            <h3>Model raw output</h3>
-            <pre>{modelText}</pre>
-          </div>
-        )}
-
-        <h3>Recommended products</h3>
-        {recommendedProducts.length === 0 ? (
-          <div>No recommendations yet.</div>
-        ) : (
-          <ul className="product-list">
-            {recommendedProducts.map((p) => (
-              <li key={p.id} className="product-item recommended">
-                <strong>{p.name}</strong> — ${p.price} <em>({p.category})</em>
-                <div className="features">{p.features.join(", ")}</div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
       <footer style={{ marginTop: 20 }}>
         <small>
-          Server should be running at http://localhost:3000 (see README)
+          Server should be running at{" "}
+          <a href={`${API_BASE_URL}/health`} target="_blank">
+            {API_BASE_URL}/health
+          </a>
+          {" - "}
+          <a
+            href="https://github.com/chaturvedi2607/product-recommender"
+            target="_blank"
+          >
+            GitHub Repository
+          </a>
         </small>
       </footer>
     </div>
