@@ -1,0 +1,52 @@
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial;
+  padding: 20px;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.panel {
+  border: 1px solid #eee;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+.product-list {
+  list-style: none;
+  padding: 0;
+}
+.product-item {
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+.product-item.recommended {
+  background: #f7fff7;
+}
+.features {
+  font-size: 0.9em;
+  color: #666;
+}
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+.actions {
+  margin-top: 8px;
+}
+button {
+  padding: 8px 12px;
+  margin-right: 8px;
+}
+.error {
+  color: #b00020;
+}
+pre {
+  background: #f6f8fa;
+  padding: 8px;
+  border-radius: 6px;
+  overflow: auto;
+}
