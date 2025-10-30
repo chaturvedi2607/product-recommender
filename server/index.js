@@ -93,6 +93,18 @@ app.post("/recommend", async (req, res) => {
   }
 });
 
+// Health endpoints
+app.get("/healthz", (req, res) => {
+  res.json({
+    status: "ok",
+    uptime: process.uptime(),
+    openai: OPENAI_KEY ? "configured" : "missing",
+  });
+});
+
+// friendly alias
+app.get("/health", (req, res) => res.redirect("/healthz"));
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);

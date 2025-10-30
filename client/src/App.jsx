@@ -15,11 +15,14 @@ export default function App() {
     setRecommendedIds([]);
 
     try {
-      const resp = await fetch("http://localhost:3000/recommend", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: query, products: PRODUCTS }),
-      });
+      const resp = await fetch(
+        "https://product-recommender-peach.vercel.app/recommend",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: query, products: PRODUCTS }),
+        }
+      );
       if (!resp.ok) throw new Error(`Server error ${resp.status}`);
       const data = await resp.json();
       // data = { recommendedIds: [...], modelText: '...' }
